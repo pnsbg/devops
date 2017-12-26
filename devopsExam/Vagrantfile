@@ -1,0 +1,45 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  config.ssh.insert_key = false
+
+  config.vm.define "jenkins" do |jenkins|
+    jenkins.vm.box="centos7_clear"
+    jenkins.vm.hostname = "jenkins"
+    jenkins.vm.network "private_network", ip: "10.10.10.12"
+    # Add shared directory. Path relative to directory of Vagrantfile
+    jenkins.vm.synced_folder "source/jenkins/", "/vagrant"
+    jenkins.vm.provision "shell", path: "modScript.sh"
+  end
+
+  config.vm.define "nagios" do |nagios|
+    nagios.vm.box="centos7_clear"
+    nagios.vm.hostname = "nagios"
+    nagios.vm.network "private_network", ip: "10.10.10.13"
+    # Add shared directory. Path relative to directory of Vagrantfile
+    nagios.vm.synced_folder "source/nagios/", "/vagrant"
+    nagios.vm.provision "shell", path: "modScript.sh"
+  end
+
+  config.vm.define "docker" do |docker|
+    docker.vm.box="centos7_clear"
+    docker.vm.hostname = "docker"
+    docker.vm.network "private_network", ip: "10.10.10.14"
+    # Add shared directory. Path relative to directory of Vagrantfile
+    docker.vm.synced_folder "source/docker/", "/vagrant"
+    docker.vm.provision "shell", path: "modScript.sh"
+  end
+
+  config.vm.define "ansible" do |ansible|
+    ansible.vm.box="centos7_clear"
+    ansible.vm.hostname = "ansible"
+    ansible.vm.network "private_network", ip: "10.10.10.11"
+    # Add shared directory. Path relative to directory of Vagrantfile
+    ansible.vm.synced_folder "source/ansible/", "/vagrant"
+    ansible.vm.provision "shell", path: "modScriptAnsible.sh"
+  end
+
+end
+ 
