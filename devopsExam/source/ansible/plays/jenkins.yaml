@@ -1,0 +1,43 @@
+- name: Install Jenkins prerequirements
+  yum: name={{ item }} state=present
+  with_items:
+  - yum-utils
+
+- name: Add Jenkins repository
+  command: yum-config-manager --add-repo https://pkg.jenkins.io/redhat/jenkins.repo
+  
+- name: Add Jenkins repository key
+  rpm_key:
+    state: present
+    key: https://pkg.jenkins.io/redhat/jenkins.io.key
+    
+#- name: Install Jenkins
+  #yum: name={{ item }} state=present
+  #with_items:
+  #- jenkins
+  #- java-1.8.0-openjdk
+  
+#- name: Start and enable Jenkins
+  #systemd:
+    #name: jenkins
+    #state: started
+    #enabled: true
+    
+#- name: Check current directory
+  #command: pwd
+  #register: currentDir
+  
+#- debug: msg="{{ currentDir.stdout }}"
+    
+- name: Download Jenkins role (geerlingguy) locally
+  connection: local
+  command: /usr/bin/ansible-galaxy install geerlingguy.jenkins
+    
+- name: Install GIT
+  yum: name={{ item }} state=present
+  with_items:
+  - git
+  
+- name: Configure Jenkins CI server
+  include_role:
+    name: geerlingguy.jenkins

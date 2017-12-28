@@ -1,0 +1,12 @@
+---
+- hosts: grp-docker
+  become: true
+
+  tasks: 
+    - include_tasks: plays/docker.yaml
+    
+- hosts: grp-jenkins
+  become: true
+
+  tasks: 
+    - include_tasks: plays/jenkins.yaml
