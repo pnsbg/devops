@@ -1,4 +1,10 @@
 ---
+- hosts: grp-ansible
+  become: true
+
+  tasks: 
+    - include_tasks: plays/ansible.yaml
+    
 - hosts: grp-docker
   become: true
 

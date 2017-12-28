@@ -2,6 +2,8 @@
   yum: name={{ item }} state=present
   with_items:
   - yum-utils
+  - git
+  - curl
 
 - name: Add Jenkins repository
   command: yum-config-manager --add-repo https://pkg.jenkins.io/redhat/jenkins.repo
@@ -28,15 +30,6 @@
   #register: currentDir
   
 #- debug: msg="{{ currentDir.stdout }}"
-    
-- name: Download Jenkins role (geerlingguy) locally
-  connection: local
-  command: /usr/bin/ansible-galaxy install geerlingguy.jenkins
-    
-- name: Install GIT
-  yum: name={{ item }} state=present
-  with_items:
-  - git
   
 - name: Configure Jenkins CI server
   include_role:

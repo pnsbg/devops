@@ -1,0 +1,7 @@
+- name: Install Ansible prerequirements
+  yum: name={{ item }} state=present
+  with_items:
+  - yum-utils
+
+- name: Download Jenkins role (geerlingguy) locally
+  command: /usr/bin/ansible-galaxy install geerlingguy.jenkins
