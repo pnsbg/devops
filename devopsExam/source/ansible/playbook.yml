@@ -1,0 +1,25 @@
+---
+- hosts: grp-ansible
+  become: true
+  tasks: 
+    - include_tasks: plays/ansible.yml
+    
+- hosts: grp-docker
+  become: true
+  tasks: 
+    - include_tasks: plays/docker/installDocker.yml
+    - include_tasks: plays/docker/containerHttp.yml
+    
+- hosts: grp-jenkins
+  become: true
+  roles:
+    - role: geerlingguy.java
+    - role: geerlingguy.jenkins
+      become: true
+  vars_files:
+    - plays/jenkins/varPlugins.yml
+  tasks: 
+    - include_tasks: plays/jenkins/installAdditions.yml
+    - include_tasks: plays/jenkins/installPlugins.yml
+    - include_tasks: plays/jenkins/addCredentials.yml
+    - include_tasks: plays/jenkins/addSshHosts.yml

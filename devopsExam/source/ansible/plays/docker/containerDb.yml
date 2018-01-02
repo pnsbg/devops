@@ -1,0 +1,6 @@
+---
+- name: Test Task
+  command: pwd
+  register: curdir
+  
+- debug: msg="{{ curdir.stdout }}"

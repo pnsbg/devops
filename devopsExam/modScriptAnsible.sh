@@ -36,7 +36,7 @@ echo "========================================================================="
 
 echo ">>> Start Ansible playbook ..."
 cd /vagrant
-ansible-playbook playbook.yaml
+ansible-playbook playbook.yml -v
 
 
 echo "=== NODE CONFIGURATION COMPLETED ========================================"

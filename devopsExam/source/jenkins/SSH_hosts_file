@@ -1,0 +1,11 @@
+    <org.jvnet.hudson.plugins.CredentialsSSHSite>
+      <hostname>{{ r_hostname }}</hostname>
+      <username>vagrant</username>
+      <port>22</port>
+      <credentialId>0000</credentialId>
+      <serverAliveInterval>0</serverAliveInterval>
+      <timeout>0</timeout>
+      <pty>false</pty>
+    </org.jvnet.hudson.plugins.CredentialsSSHSite>
+    
+    
