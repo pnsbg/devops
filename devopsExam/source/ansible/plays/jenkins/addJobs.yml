@@ -1,0 +1,8 @@
+- name: Copy job definitions
+  become: true
+  copy:
+    src: plays/jenkins/jobs/*.xml
+    dest: /vagrant/jobs/
+    owner: vagrant
+    group: vagrant
+    mode: 0755
