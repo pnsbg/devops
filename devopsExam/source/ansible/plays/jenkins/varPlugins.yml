@@ -3,5 +3,5 @@
       enabled: yes
     GitHub:
       enabled: yes
-    GitLab:
-      enabled: yes
+    #GitLab:
+      #enabled: yes

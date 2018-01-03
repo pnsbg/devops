@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>Create web  container</description>
+  <description>Create webnode container</description>
   <keepDependencies>false</keepDependencies>
   <properties/>
   <scm class="hudson.scm.NullSCM"/>
@@ -14,20 +14,15 @@
   <builders>
     <org.jvnet.hudson.plugins.SSHBuilder plugin="ssh@2.5">
       <siteName>vagrant@docker:22</siteName>
-      <command>echo -e &quot;&gt;&gt;&gt; Check if webcontainer image exists and remove it...&quot;
-webcon=`docker image ls | grep webcontainer | wc -l`
-if [ &quot;$webcon&quot; -eq &quot;1&quot; ]; then
-   docker image rm webcontainer
+      <command>echo -e &quot;&gt;&gt;&gt; Check if webnode container is running and stop it...&quot;
+webnode=`docker container ls -a | grep webnode | wc -l`
+if [ &quot;$webnode&quot; -eq &quot;1&quot; ]; then
+  docker container stop webnode
+  docker container rm webnode
 fi
 
-cd /vagrant/web
-
-echo -e &quot;&gt;&gt;&gt; Sync GitHub repo...&quot;
-rm -rf www/
-git clone https://github.com/ptsonkov/dobSite.git ./www
-
-echo -e &quot;&gt;&gt;&gt; Build new webcontainer image...&quot;
-docker build -f /vagrant/web/Dockerfile -t webcontainer .
+echo -e &quot;&gt;&gt;&gt; Start new webnode container...&quot;
+docker container run -d -p 8080:80 --name webnode webcontainer
 </command>
       <execEachLine>false</execEachLine>
     </org.jvnet.hudson.plugins.SSHBuilder>

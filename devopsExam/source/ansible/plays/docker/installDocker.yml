@@ -14,6 +14,8 @@
   - yum-utils
   - device-mapper-persistent-data
   - lvm2
+  - mysql
+  - mariadb
   
 - name: Add Docker repository
   command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo

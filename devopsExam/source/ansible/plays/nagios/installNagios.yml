@@ -1,0 +1,17 @@
+- name: Install Ansible prerequirements
+  yum: name={{ item }} state=present
+  with_items:
+  - yum-utils
+  - mysql
+  - mariadb
+
+- name: Remove Jenkins role "geerlingguy.jenkins"
+  command: ansible-galaxy remove geerlingguy.jenkins -p /vagrant/roles
+
+- name: Download Jenkins role "geerlingguy.jenkins" locally
+  command: ansible-galaxy install geerlingguy.jenkins -p /vagrant/roles
+  
+- name: Patch Java role
+  copy:
+    src: /vagrant/vars/RedHat.yml
+    dest: /vagrant/roles/geerlingguy.java/vars/RedHat.yml

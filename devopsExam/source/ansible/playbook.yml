@@ -2,13 +2,12 @@
 - hosts: grp-ansible
   become: true
   tasks: 
-    - include_tasks: plays/ansible.yml
+    - include_tasks: plays/ansible/installAnsible.yml
     
 - hosts: grp-docker
   become: true
   tasks: 
     - include_tasks: plays/docker/installDocker.yml
-    - include_tasks: plays/docker/containerHttp.yml
     
 - hosts: grp-jenkins
   become: true
@@ -24,3 +23,4 @@
     - include_tasks: plays/jenkins/addCredentials.yml
     - include_tasks: plays/jenkins/addSshHosts.yml
     - include_tasks: plays/jenkins/addJobs.yml
+    - include_tasks: plays/jenkins/execJobs.yml

@@ -4,3 +4,4 @@
   - yum-utils
   - git
   - mysql
+  - mariadb

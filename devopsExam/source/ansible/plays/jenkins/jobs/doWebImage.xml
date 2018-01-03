@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>Reload db container</description>
+  <description>Create webcontainer  image</description>
   <keepDependencies>false</keepDependencies>
   <properties/>
   <scm class="hudson.scm.NullSCM"/>
@@ -14,15 +14,20 @@
   <builders>
     <org.jvnet.hudson.plugins.SSHBuilder plugin="ssh@2.5">
       <siteName>vagrant@docker:22</siteName>
-      <command>echo -e &quot;&gt;&gt;&gt; Check if dbnode container is running and stop it...&quot;
-webnode=`docker container ls | grep dbnode | wc -l`
-if [ &quot;$webnode&quot; -eq &quot;1&quot; ]; then
-  docker container stop dbnode
-  docker container rm dbnode
+      <command>echo -e &quot;&gt;&gt;&gt; Check if webcontainer image exists and remove it...&quot;
+webcon=`docker image ls -a | grep webcontainer | wc -l`
+if [ &quot;$webcon&quot; -eq &quot;1&quot; ]; then
+   docker image rm webcontainer
 fi
 
-echo -e &quot;&gt;&gt;&gt; Start new dbnode container...&quot;
-docker container run -d -p 3306:3306 -e  MYSQL_ROOT_PASSWORD=root --name dbnode mysql
+cd /vagrant/web
+
+echo -e &quot;&gt;&gt;&gt; Sync GitHub repo...&quot;
+rm -rf www/
+git clone https://github.com/ptsonkov/dobSite.git ./www
+
+echo -e &quot;&gt;&gt;&gt; Build new webcontainer image...&quot;
+docker build -f /vagrant/web/Dockerfile -t webcontainer .
 </command>
       <execEachLine>false</execEachLine>
     </org.jvnet.hudson.plugins.SSHBuilder>
