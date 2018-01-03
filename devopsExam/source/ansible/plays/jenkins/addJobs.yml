@@ -9,7 +9,7 @@
     directory_mode: yes
     
 - name: Create job list
-  shell: find . -type f -name "*.xml" | awk -F '.' '{print $1}'
+  shell: find /vagrant/jobs/ -type f -name "*.xml" | awk -F '.' '{print $1}' | awk -F '/' '{print $4}'
   register: job_list
   
 - name: Delete jobs if exists
