@@ -15,8 +15,25 @@ nagios
 [grp-docker]
 docker
 
-[grp-servers:children]
+[grp-ssh:children]
 grp-ansible
 grp-jenkins
 grp-nagios
+grp-docker
+
+[grp-linux:children]
+grp-ansible
+grp-jenkins
+grp-nagios
+grp-docker
+
+[grp-linux:vars]
+system_type='linux-server'
+
+[grp-httpd:children]
+grp-jenkins
+grp-nagios
+grp-docker
+
+[grp-db:children]
 grp-docker

@@ -30,7 +30,7 @@
 - name: Deploy SSH_hosts.j2 block on jenkins nodes
   vars: 
     r_hostname: "{{ item }}"
-  with_items: "{{ groups['grp-servers'] }}"
+  with_items: "{{ groups['grp-ssh'] }}"
   template: src=templates/SSH_hosts.j2 dest=/vagrant/{{ r_hostname }}_ssh_block.tmpl
   
 - name: Add template to hosts list

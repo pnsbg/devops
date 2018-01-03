@@ -1,5 +1,3 @@
-#- debug: msg="{{ my_jenkins_plugins }}"
-
 - name: Install additional plugins
   jenkins_plugin:
     name: "{{ item.key }}"
@@ -14,8 +12,6 @@
   retries: 10
   delay: 1
   ignore_errors: yes
-  
-#- debug: msg="{{ task_result.results|changed }}"
   
 - name: Initiate the fact
   set_fact:
@@ -39,7 +35,6 @@
     status_code: 200
     timeout: 5
   register: jenkins_service_status
-  # Keep trying for 5 mins in 5 sec intervals
   retries: 60
   delay: 5
   until: >

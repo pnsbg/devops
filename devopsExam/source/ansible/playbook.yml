@@ -4,6 +4,12 @@
   tasks: 
     - include_tasks: plays/ansible/installAnsible.yml
     
+- hosts: grp-nagios
+  become: true
+  tasks: 
+    - include_tasks: plays/nagios/installNagios.yml
+    - include_tasks: plays/nagios/addTemplates.yml
+    
 - hosts: grp-docker
   become: true
   tasks: 
@@ -16,7 +22,7 @@
     - role: geerlingguy.jenkins
       become: true
   vars_files:
-    - plays/jenkins/varPlugins.yml
+    - plays/jenkins/vars/varPlugins.yml
   tasks: 
     - include_tasks: plays/jenkins/installAdditions.yml
     - include_tasks: plays/jenkins/installPlugins.yml

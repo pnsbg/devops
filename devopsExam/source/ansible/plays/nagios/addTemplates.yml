@@ -1,0 +1,38 @@
+- name: Add hosts to be monitored
+  vars: 
+    rhost: "{{ item }}"
+  with_items: "{{ groups['grp-linux'] }}"
+  template: src=templates/host_template.j2 dest=/etc/nagios/conf.d/host-{{ rhost }}.cfg
+  
+- name: Add Generic template
+  copy:
+    src: templates/generic_template.j2
+    dest: /etc/nagios/conf.d/remote-service-template.cfg
+    owner: root
+    group: root
+    mode: 0644
+    
+- name: Add Generic template
+  copy:
+    src: templates/dbcheck_template.j2
+    dest: /etc/nagios/conf.d/mysql-commands.cfg
+    owner: root
+    group: root
+    mode: 0644
+  
+- name: Add HTTP to be monitored
+  vars: 
+    rhost: "{{ item }}"
+  with_items: "{{ groups['grp-httpd'] }}"
+  template: src=templates/http_template.j2 dest=/etc/nagios/conf.d/service-http-{{ rhost }}.cfg
+  
+- name: Add DATABASE to be monitored
+  vars: 
+    rhost: "{{ item }}"
+  with_items: "{{ groups['grp-db'] }}"
+  template: src=templates/db_template.j2 dest=/etc/nagios/conf.d/service-mysql-{{ rhost }}.cfg
+  
+- name: Restart Nagios
+  systemd:
+    name: nagios
+    state: restarted
