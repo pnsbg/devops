@@ -13,7 +13,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <org.jvnet.hudson.plugins.SSHBuilder plugin="ssh@2.5">
-      <siteName>vagrant@docker:22</siteName>
+      <siteName>vagrant@dhost.sulab.exam:22</siteName>
       <command>echo -e &quot;&gt;&gt;&gt; Check if dbnode container is running and stop it...&quot;
 dbnode=`docker container ls -a | grep dbnode | wc -l`
 if [ &quot;$dbnode&quot; -eq &quot;1&quot; ]; then
@@ -21,8 +21,19 @@ if [ &quot;$dbnode&quot; -eq &quot;1&quot; ]; then
   docker container rm dbnode
 fi
 
+echo -e &quot;&gt;&gt;&gt; Create GitRepo...&quot;
+mkdir -p  /vagrant/dockerGitRepo
+cd /vagrant/dockerGitRepo
+git clone https://github.com/shekeriev/dob-2017-oct-exam.git .
+
 echo -e &quot;&gt;&gt;&gt; Start new dbnode container...&quot;
-docker container run -d -p 3306:3306 -e  MYSQL_ROOT_PASSWORD=root --name dbnode mysql
+cd /vagrant/dockerGitRepo/mysql
+docker image build -t dbcontainer .
+docker container run -d -p 3306:3306 -e  MYSQL_ROOT_PASSWORD=Password1 --name dbnode dbcontainer
+
+#echo -e &quot;&gt;&gt;&gt; Import initial database...&quot;
+#sleep 40
+#mysql -u root -proot -h dhost.sulab.exam &lt; /vagrant/dockerGitRepo/mysql/sql/init.sql
 </command>
       <execEachLine>false</execEachLine>
     </org.jvnet.hudson.plugins.SSHBuilder>

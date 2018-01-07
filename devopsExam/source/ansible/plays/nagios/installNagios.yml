@@ -64,3 +64,9 @@
     name: nagios
     state: started
     enabled: true
+
+- name: Start and enable NRPE plugin
+  systemd:
+    name: nrpe
+    state: started
+    enabled: true

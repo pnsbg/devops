@@ -9,12 +9,12 @@ sudo cat /etc/motd
 echo "========================================================================="
 
 echo ">>> Set /etc/hosts ..."
-sudo echo "10.10.10.11	ahost.sulab.exam" >> /etc/hosts
-sudo echo "10.10.10.12	jhost.sulab.exam" >> /etc/hosts
-sudo echo "10.10.10.13	nhost.sulab.exam" >> /etc/hosts
-sudo echo "10.10.10.14	dhost.sulab.exam" >> /etc/hosts
-sudo echo "10.10.10.15	w.dhost.sulab.exam" >> /etc/hosts
-sudo echo "10.10.10.16	d.dnost.sulab.exam" >> /etc/hosts
+sudo echo "192.168.89.11	ahost.sulab.exam" >> /etc/hosts
+sudo echo "192.168.89.12	jhost.sulab.exam" >> /etc/hosts
+sudo echo "192.168.89.13	nhost.sulab.exam" >> /etc/hosts
+sudo echo "192.168.89.14	dhost.sulab.exam" >> /etc/hosts
+sudo echo "192.168.89.15	w.dhost.sulab.exam" >> /etc/hosts
+sudo echo "192.168.89.16	d.dnost.sulab.exam" >> /etc/hosts
 
 echo "========================================================================="
 

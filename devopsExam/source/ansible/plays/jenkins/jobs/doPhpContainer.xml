@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>Create webnode container</description>
+  <description>Create phpnode container</description>
   <keepDependencies>false</keepDependencies>
   <properties/>
   <scm class="hudson.scm.NullSCM"/>
@@ -14,19 +14,19 @@
   <builders>
     <org.jvnet.hudson.plugins.SSHBuilder plugin="ssh@2.5">
       <siteName>vagrant@dhost.sulab.exam:22</siteName>
-      <command>echo -e &quot;&gt;&gt;&gt; Check if webnode container is running and stop it...&quot;
-webnode=`docker container ls -a | grep webnode | wc -l`
-if [ &quot;$webnode&quot; -eq &quot;1&quot; ]; then
-  docker container stop webnode
-  docker container rm webnode
+      <command>echo -e &quot;&gt;&gt;&gt; Check if phpnode container is running and stop it...&quot;
+phpnode=`docker container ls -a | grep phpnode | wc -l`
+if [ &quot;$phpnode&quot; -eq &quot;1&quot; ]; then
+  docker container stop phpnode
+  docker container rm phpnode
 fi
 
-echo -e &quot;&gt;&gt;&gt; Start new webnode container...&quot;
-cd /vagrant/dockerGitRepo/nginx
-sed -i &apos;s/dob-php/phpnode/g&apos; /vagrant/dockerGitRepo/nginx/conf/site.conf
+echo -e &quot;&gt;&gt;&gt; Start new phpnode container...&quot;
+cd /vagrant/dockerGitRepo/php
 sed -i &apos;s/dob-mysql/dbnode/g&apos; /vagrant/dockerGitRepo/site/index.php
-docker image build -t webcontainer .
-docker container run -d --name webnode -p 8080:80 -v /vagrant/dockerGitRepo/site:/site --link phpnode:phnode webcontainer</command>
+docker image build -t phpcontainer .
+docker container run -d --name phpnode -p 9000:9000 -v /vagrant/dockerGitRepo/site:/site --link dbnode:dbnode phpcontainer
+</command>
       <execEachLine>false</execEachLine>
     </org.jvnet.hudson.plugins.SSHBuilder>
   </builders>

@@ -1,7 +1,17 @@
 - my_jenkins_plugins:
     SSH:
       enabled: yes
+    SSH Slaves:
+      enabled: yes
     GitHub:
       enabled: yes
-    #GitLab:
-      #enabled: yes
+    Build Pipeline:
+      enabled: yes
+    Pipeline:
+      enabled: yes
+    Copy Artifact:
+      enabled: yes
+    Log Parser:
+      enabled: yes
+    Template Project:
+      enabled: yes
