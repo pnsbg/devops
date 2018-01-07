@@ -1,0 +1,7 @@
+- my_jenkins_plugins:
+    SSH:
+      enabled: yes
+    GitHub:
+      enabled: yes
+    #GitLab:
+      #enabled: yes

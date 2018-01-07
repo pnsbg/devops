@@ -1,0 +1,58 @@
+- name: Copy main SSH host configuration
+  become: true
+  copy:
+    src: plays/jenkins/templates/org.jvnet.hudson.plugins.SSHBuildWrapper.xml
+    dest: /var/lib/jenkins/org.jvnet.hudson.plugins.SSHBuildWrapper.xml
+    owner: jenkins
+    group: jenkins
+    mode: 0600
+
+- name: Delete *.tmpl files if exists
+  shell: 'rm -f /vagrant/*.tmpl'
+  
+- name: Check if SSH host file contain other hosts
+  become: true
+  shell: 'grep "sites/" /var/lib/jenkins/org.jvnet.hudson.plugins.SSHBuildWrapper.xml | wc -l'
+  register: no_sites
+  
+#- debug: msg={{ no_sites }}
+  
+- name: Change site block
+  become: true
+  shell: 'sed -i "s/sites\//sites/g" /var/lib/jenkins/org.jvnet.hudson.plugins.SSHBuildWrapper.xml'
+  when: no_sites.stdout == "1"
+  
+- name: Add end site block
+  become: true
+  shell: 'sed -i "/<sites>/a </sites>" /var/lib/jenkins/org.jvnet.hudson.plugins.SSHBuildWrapper.xml'
+  when: no_sites.stdout == "1"
+
+- name: Deploy SSH_hosts.j2 block on jenkins nodes
+  vars: 
+    r_hostname: "{{ item }}"
+  with_items: "{{ groups['grp-ssh'] }}"
+  template: src=templates/SSH_hosts.j2 dest=/vagrant/{{ r_hostname }}_ssh_block.tmpl
+  
+- name: Add template to hosts list
+  shell: 'for i in `/usr/bin/ls /vagrant/*.tmpl`; do sudo sed -i "/<sites>/r $i" /var/lib/jenkins/org.jvnet.hudson.plugins.SSHBuildWrapper.xml; done'
+  
+- name: Restart Jenkins
+  service:
+    name: jenkins
+    state: restarted
+
+- name: Wait for Jenkins to start up
+  uri:
+    url: http://localhost:8080
+    status_code: 200
+    timeout: 5
+  register: jenkins_service_status
+  # Keep trying for 5 mins in 5 sec intervals
+  retries: 60
+  delay: 5
+  until: >
+      'status' in jenkins_service_status and
+      jenkins_service_status['status'] == 200
+      
+- name: Delete *.tmpl files if exists
+  shell: 'rm -f /vagrant/*.tmpl'

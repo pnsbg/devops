@@ -1,0 +1,61 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  config.ssh.insert_key = false
+
+  config.vm.define "jenkins" do |jenkins|
+    jenkins.vm.box="ptsonkov/centos7_clear"
+    jenkins.vm.hostname = "jhost.sulab.exam"
+    jenkins.vm.provider :virtualbox do |vb|
+	vb.customize ["modifyvm", :id, "--memory", "1024"]
+    end
+    jenkins.vm.network "private_network", ip: "10.10.10.12"
+    jenkins.vm.network "forwarded_port", guest: 8080, host: 8080
+    jenkins.vm.network "forwarded_port", guest: 80, host: 8081
+    # Add shared directory. Path relative to directory of Vagrantfile
+    jenkins.vm.synced_folder "source/jenkins/", "/vagrant"
+    jenkins.vm.provision "shell", path: "modScript.sh"
+  end
+
+  config.vm.define "nagios" do |nagios|
+    nagios.vm.box="ptsonkov/centos7_clear"
+    nagios.vm.hostname = "nhost.sulab.exam"
+    nagios.vm.provider :virtualbox do |vb|
+	vb.customize ["modifyvm", :id, "--memory", "1024"]
+    end
+    nagios.vm.network "private_network", ip: "10.10.10.13"
+    nagios.vm.network "forwarded_port", guest: 80, host: 8082
+    # Add shared directory. Path relative to directory of Vagrantfile
+    nagios.vm.synced_folder "source/nagios/", "/vagrant"
+    nagios.vm.provision "shell", path: "modScript.sh"
+  end
+
+  config.vm.define "docker" do |docker|
+    docker.vm.box="ptsonkov/centos7_clear"
+    docker.vm.hostname = "dhost.sulab.exam"
+    docker.vm.provider :virtualbox do |vb|
+	vb.customize ["modifyvm", :id, "--memory", "1024"]
+    end
+    docker.vm.network "private_network", ip: "10.10.10.14"
+    docker.vm.network "forwarded_port", guest: 8080, host: 8090
+    # Add shared directory. Path relative to directory of Vagrantfile
+    docker.vm.synced_folder "source/docker/", "/vagrant"
+    docker.vm.provision "shell", path: "modScript.sh"
+  end
+
+  config.vm.define "ansible" do |ansible|
+    ansible.vm.box="ptsonkov/centos7_clear"
+    ansible.vm.hostname = "ahost.sulab.exam"
+    ansible.vm.provider :virtualbox do |vb|
+	vb.customize ["modifyvm", :id, "--memory", "1024"]
+    end
+    ansible.vm.network "private_network", ip: "10.10.10.11"
+    # Add shared directory. Path relative to directory of Vagrantfile
+    ansible.vm.synced_folder "source/ansible/", "/vagrant"
+    ansible.vm.provision "shell", path: "modScriptAnsible.sh"
+  end
+
+end
+ 

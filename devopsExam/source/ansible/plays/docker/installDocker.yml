@@ -1,0 +1,38 @@
+---
+- name: Remove existing Docker
+  yum: name={{ item }} state=removed
+  with_items:
+  - docker
+  - docker-common
+  - container-selinux
+  - docker-selinux
+  - docker-engine
+  
+- name: Install Docker prerequirements
+  yum: name={{ item }} state=present
+  with_items:
+  - yum-utils
+  - device-mapper-persistent-data
+  - lvm2
+  - mysql
+  - mariadb
+  
+- name: Add Docker repository
+  command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  
+- name: Install Docker
+  yum: name={{ item }} state=present
+  with_items:
+  - docker-ce
+  
+- name: Add "vagrant" to "docker" group
+  user:
+    name: vagrant
+    groups: docker
+    append: yes
+  
+- name: Start and enable Docker
+  systemd:
+    name: docker
+    state: started
+    enabled: true

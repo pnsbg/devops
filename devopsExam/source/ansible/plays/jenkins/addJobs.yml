@@ -1,0 +1,22 @@
+- name: Delete job definitions
+  shell: 'rm -rf /vagrant/jobs'
+
+- name: Copy job definitions
+  become: true
+  copy:
+    src: plays/jenkins/jobs
+    dest: /vagrant
+    directory_mode: yes
+    
+- name: Create job list
+  shell: find /vagrant/jobs/ -type f -name "*.xml" | awk -F '.' '{print $1}' | awk -F '/' '{print $4}'
+  register: job_list
+  
+- name: Delete jobs if exists
+  shell: java -jar /opt/jenkins-cli.jar -s http://localhost:8080 -auth admin:admin delete-job {{ item }}
+  with_items: "{{ job_list.stdout_lines }}"
+  ignore_errors: yes
+  
+- name: Add jobs
+  shell: java -jar /opt/jenkins-cli.jar -s http://localhost:8080 -auth admin:admin create-job {{ item }} < /vagrant/jobs/{{ item }}.xml
+  with_items: "{{ job_list.stdout_lines }}"

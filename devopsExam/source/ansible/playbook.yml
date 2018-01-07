@@ -1,0 +1,32 @@
+---
+- hosts: grp-ansible
+  become: true
+  tasks: 
+    - include_tasks: plays/ansible/installAnsible.yml
+    
+- hosts: grp-nagios
+  become: true
+  tasks: 
+    - include_tasks: plays/nagios/installNagios.yml
+    - include_tasks: plays/nagios/addTemplates.yml
+    
+- hosts: grp-docker
+  become: true
+  tasks: 
+    - include_tasks: plays/docker/installDocker.yml
+    
+- hosts: grp-jenkins
+  become: true
+  roles:
+    - role: geerlingguy.java
+    - role: geerlingguy.jenkins
+      become: true
+  vars_files:
+    - plays/jenkins/vars/varPlugins.yml
+  tasks: 
+    - include_tasks: plays/jenkins/installAdditions.yml
+    - include_tasks: plays/jenkins/installPlugins.yml
+    - include_tasks: plays/jenkins/addCredentials.yml
+    - include_tasks: plays/jenkins/addSshHosts.yml
+    - include_tasks: plays/jenkins/addJobs.yml
+    - include_tasks: plays/jenkins/execJobs.yml

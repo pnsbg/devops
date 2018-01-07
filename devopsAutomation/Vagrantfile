@@ -6,7 +6,7 @@ Vagrant.configure("2") do |config|
   config.ssh.insert_key = false
 
   config.vm.define "jenkins" do |jenkins|
-    jenkins.vm.box="centos7_clear"
+    jenkins.vm.box="ptsonkov/centos7_clear"
     jenkins.vm.hostname = "jenkins"
     jenkins.vm.provider :virtualbox do |vb|
 	vb.customize ["modifyvm", :id, "--memory", "1024"]
@@ -20,7 +20,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "nagios" do |nagios|
-    nagios.vm.box="centos7_clear"
+    nagios.vm.box="ptsonkov/centos7_clear"
     nagios.vm.hostname = "nagios"
     nagios.vm.provider :virtualbox do |vb|
 	vb.customize ["modifyvm", :id, "--memory", "1024"]
@@ -33,7 +33,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "docker" do |docker|
-    docker.vm.box="centos7_clear"
+    docker.vm.box="ptsonkov/centos7_clear"
     docker.vm.hostname = "docker"
     docker.vm.provider :virtualbox do |vb|
 	vb.customize ["modifyvm", :id, "--memory", "1024"]
@@ -46,7 +46,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "ansible" do |ansible|
-    ansible.vm.box="centos7_clear"
+    ansible.vm.box="ptsonkov/centos7_clear"
     ansible.vm.hostname = "ansible"
     ansible.vm.provider :virtualbox do |vb|
 	vb.customize ["modifyvm", :id, "--memory", "1024"]

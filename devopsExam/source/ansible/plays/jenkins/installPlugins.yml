@@ -1,0 +1,48 @@
+- name: Install additional plugins
+  jenkins_plugin:
+    name: "{{ item.key }}"
+    url_username: admin
+    url_password: admin
+    url: http://localhost:8080
+  register: plugin_install_out
+  when: >
+    'version' not in item.value
+  with_dict: "{{ my_jenkins_plugins }}"
+  until: plugin_install_out | changed
+  retries: 10
+  delay: 1
+  ignore_errors: yes
+  
+- name: Initiate the fact
+  set_fact:
+    jenkins_restart_required: no
+
+- name: Check if restart is required by any of the plugins
+  set_fact:
+    jenkins_restart_required: yes
+  when: item.changed
+  with_items: "{{ plugin_install_out.results }}"
+
+- name: Restart Jenkins if required
+  service:
+    name: jenkins
+    state: restarted
+  when: jenkins_restart_required
+
+- name: Wait for Jenkins to start up
+  uri:
+    url: http://localhost:8080
+    status_code: 200
+    timeout: 5
+  register: jenkins_service_status
+  retries: 60
+  delay: 5
+  until: >
+      'status' in jenkins_service_status and
+      jenkins_service_status['status'] == 200
+  when: jenkins_restart_required
+
+- name: Reset the fact
+  set_fact:
+    jenkins_restart_required: no
+  when: jenkins_restart_required

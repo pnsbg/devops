@@ -1,0 +1,7 @@
+- name: Install additions
+  yum: name={{ item }} state=present
+  with_items:
+  - yum-utils
+  - git
+  - mysql
+  - mariadb

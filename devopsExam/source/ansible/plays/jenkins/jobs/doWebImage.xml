@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>Create webcontainer  image</description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <org.jvnet.hudson.plugins.SSHBuilder plugin="ssh@2.5">
+      <siteName>vagrant@docker:22</siteName>
+      <command>echo -e &quot;&gt;&gt;&gt; Check if webcontainer image exists and remove it...&quot;
+webcon=`docker image ls -a | grep webcontainer | wc -l`
+if [ &quot;$webcon&quot; -eq &quot;1&quot; ]; then
+   docker image rm webcontainer
+fi
+
+cd /vagrant/web
+
+echo -e &quot;&gt;&gt;&gt; Sync GitHub repo...&quot;
+rm -rf www/
+git clone https://github.com/ptsonkov/dobSite.git ./www
+
+echo -e &quot;&gt;&gt;&gt; Build new webcontainer image...&quot;
+docker build -f /vagrant/web/Dockerfile -t webcontainer .
+</command>
+      <execEachLine>false</execEachLine>
+    </org.jvnet.hudson.plugins.SSHBuilder>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>

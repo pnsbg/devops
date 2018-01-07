@@ -1,0 +1,6 @@
+   host port   |   guest port   |   guest node
+--------------------------------------------------------------
+   8080        |   8080         |   Jenkins WEB
+   8081        |   80           |   Jenkins node HTTPD
+   8082        |   80           |   Nagios node HTTPD
+   8090        |   8090         |   Docker test web site

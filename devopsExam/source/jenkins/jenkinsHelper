@@ -1,0 +1,67 @@
+x. Get HELP
+java -jar /opt/jenkins-cli.jar -s http://10.10.10.12:8080 -auth admin:admin help
+
+x. Check how I'm authenticated
+java -jar /opt/jenkins-cli.jar -s http://10.10.10.12:8080 -auth admin:admin who-am-i
+
+x. List my jobs
+java -jar /opt/jenkins-cli.jar -s http://10.10.10.12:8080 -auth admin:admin list-jobs
+
+x. Export job as .xml
+java -jar /opt/jenkins-cli.jar -s http://10.10.10.12:8080 -auth admin:admin get-job foo > foo.xml
+
+x. Create job from .xml
+cat foo.xml | java -jar /opt/jenkins-cli.jar -s http://10.10.10.12:8080 -auth admin:admin create-job bar
+or
+java -jar /opt/jenkins-cli.jar -s http://10.10.10.12:8080 -auth admin:admin create-job bar < foo.xml
+
+x. SSH hosts definitions:
+/var/lib/jenkins/org.jvnet.hudson.plugins.SSHBuildWrapper.xml
+
+x. Add lines after specific pattern
+
+
+
+
+Another sed,
+
+sed '/cdef/r add.txt' input.txt
+
+input.txt:
+
+abcd
+accd
+cdef
+line
+web
+
+add.txt:
+
+line1
+line2
+line3
+line4
+
+Test:
+
+sat:~# sed '/cdef/r add.txt' input.txt
+abcd
+accd
+cdef
+line1
+line2
+line3
+line4
+line
+web
+
+If you want to apply the changes in input.txt file. Then, use -i with sed.
+
+sed -i '/cdef/r add.txt' input.txt
+
+If you want to use a regex as an expression you have to use the -E tag with sed.
+
+sed -E '/RegexPattern/r add.txt' input.txt
+
+
+

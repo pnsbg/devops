@@ -1,0 +1,66 @@
+- name: Install Nagios prerequirements
+  yum: name={{ item }} state=present
+  with_items:
+  - yum-utils
+  - mysql
+  - mariadb
+  - unzip
+  
+- name: Install Nagios
+  yum: name={{ item }} state=present
+  with_items:
+  - nagios
+  - nrpe
+  - nagios-plugins-nrpe
+  - nagios-plugins-all
+  - nrpe-selinux
+  - python-passlib
+  
+- name: Create Nagios user
+  htpasswd:
+    path: /etc/nagios/passwd
+    name: admin
+    password: 'admin'
+    owner: root
+    group: apache
+    mode: 0640
+    
+- name: Change default username from "nagiosadmin" to "admin"
+  replace:
+    path: /etc/nagios/cgi.cfg
+    regexp: 'nagiosadmin'
+    replace: 'admin'
+    backup: yes
+
+- name: Remove Nagios default user "nagiosadmin"
+  htpasswd:
+    path: /etc/nagios/passwd
+    name: nagiosadmin
+    state: absent
+    
+- name: Create web skin directory
+  shell: mkdir -p /vagrant/webskin
+    
+- name: Download Nagios web skin
+  get_url:
+    url: http://www.be-root.com/downloads/nagios/vautour/vautour_style.zip
+    dest: /vagrant/webskin/vautour_style.zip
+    mode: 0755
+    
+- name: Install Nagios web skin
+  unarchive:
+    src: /vagrant/webskin/vautour_style.zip
+    dest: /usr/share/nagios/html/
+    remote_src: yes
+
+- name: Start and enable HTTPD
+  systemd:
+    name: httpd
+    state: started
+    enabled: true
+
+- name: Start and enable Nagios
+  systemd:
+    name: nagios
+    state: started
+    enabled: true

@@ -1,0 +1,8 @@
+define host {
+        use                     {{ hostvars[rhost]['system_type'] }}
+        host_name               {{ rhost }}
+        alias                   {{ rhost }}
+        address                 {{ hostvars[rhost]['ansible_host'] }}
+        icon_image              linux40.png
+        statusmap_image         linux40.png
+}

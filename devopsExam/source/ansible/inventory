@@ -1,0 +1,39 @@
+ahost.sulab.exam		ansible=192.168.89.11
+jhost.sulab.exam		ansible_host=192.168.89.12
+nhost.sulab.exam		ansible_host=192.168.89.13
+dhost.sulab.exam		ansible_host=192.168.89.14
+
+[grp-ansible]
+ahost.sulab.exam
+
+[grp-jenkins]
+jhost.sulab.exam
+
+[grp-nagios]
+nhost.sulab.exam
+
+[grp-docker]
+dhost.sulab.exam
+
+[grp-ssh:children]
+grp-ansible
+grp-jenkins
+grp-nagios
+grp-docker
+
+[grp-linux:children]
+grp-ansible
+grp-jenkins
+grp-nagios
+grp-docker
+
+[grp-linux:vars]
+system_type='linux-server'
+
+[grp-httpd:children]
+grp-jenkins
+grp-nagios
+grp-docker
+
+[grp-db:children]
+grp-docker

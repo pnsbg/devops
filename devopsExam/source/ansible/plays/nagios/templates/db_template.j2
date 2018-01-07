@@ -1,0 +1,7 @@
+define service {
+        use                     remote-service
+        host_name               {{ rhost }}
+        service_description     MYSQL
+        check_command           check_mysql_cmdlinecred!root!root
+        notification_interval   2
+}
