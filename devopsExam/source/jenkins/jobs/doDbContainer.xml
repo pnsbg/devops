@@ -22,6 +22,7 @@ if [ &quot;$dbnode&quot; -eq &quot;1&quot; ]; then
 fi
 
 echo -e &quot;&gt;&gt;&gt; Create GitRepo...&quot;
+rm -rf /vagrant/dockerGitRepo
 mkdir -p  /vagrant/dockerGitRepo
 cd /vagrant/dockerGitRepo
 git clone https://github.com/shekeriev/dob-2017-oct-exam.git .

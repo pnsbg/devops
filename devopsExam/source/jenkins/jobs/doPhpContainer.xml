@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<project>
+<?xml version="1.0" encoding="UTF-8"?><project>
   <actions/>
   <description>Create phpnode container</description>
   <keepDependencies>false</keepDependencies>
@@ -14,16 +13,16 @@
   <builders>
     <org.jvnet.hudson.plugins.SSHBuilder plugin="ssh@2.5">
       <siteName>vagrant@dhost.sulab.exam:22</siteName>
-      <command>echo -e &quot;&gt;&gt;&gt; Check if phpnode container is running and stop it...&quot;
+      <command>echo -e "&gt;&gt;&gt; Check if phpnode container is running and stop it..."
 phpnode=`docker container ls -a | grep phpnode | wc -l`
-if [ &quot;$phpnode&quot; -eq &quot;1&quot; ]; then
+if [ "$phpnode" -eq "1" ]; then
   docker container stop phpnode
   docker container rm phpnode
 fi
 
-echo -e &quot;&gt;&gt;&gt; Start new phpnode container...&quot;
+echo -e "&gt;&gt;&gt; Start new phpnode container..."
 cd /vagrant/dockerGitRepo/php
-sed -i &apos;s/dob-mysql/dbnode/g&apos; /vagrant/dockerGitRepo/site/index.php
+sed -i 's/dob-mysql/dbnode/g' /vagrant/dockerGitRepo/site/index.php
 docker image build -t phpcontainer .
 docker container run -d --name phpnode -p 9000:9000 -v /vagrant/dockerGitRepo/site:/site --link dbnode:dbnode phpcontainer
 </command>

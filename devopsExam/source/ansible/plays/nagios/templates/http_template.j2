@@ -2,6 +2,6 @@ define service {
         use                             remote-service         
         host_name                       {{ rhost }}
         service_description             HTTP
-        check_command                   check_http!$HOSTADDRESS$
+        check_command                   check_http!$HOSTADDRESS$,check_http!$HOSTADDRESS$:8080,check_http!$HOSTADDRESS$:8090
         notifications_enabled           0
 }
